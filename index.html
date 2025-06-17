@@ -109,7 +109,7 @@ blockquote > #opsL{text-align:right;font-size:12px;font-weight:400;line-height:0
 .swal2-title{line-height:1.3em;font-size:17px;text-align:center;padding:15px 30px 0 30px;}
 //.swal2-container.swal2-backdrop-show{background:none;}
 .swal2-timer-progress-bar-container > *{opacity:.7;background:#00B6FF;margin:0 2px}
-.swal2-modal{background: rgba(0,0,0, .6);backdrop-filter: blur(3px);-webkit-backdrop-filter: blur(3px);box-shadow: 0 4px 30px rgba(255,255,255, 0.3);border: 1px solid rgba(255, 255, 255, 0.3);border-radius: 24px;max-width:280px;top:-60px;}
+.swal2-modal{background: rgba(0,0,0, .6);backdrop-filter: blur(3px);-webkit-backdrop-filter: blur(3px);box-shadow: 0 4px 30px rgba(255,255,255, 0.3);border: 1px solid rgba(255, 255, 255, 0.3);border-radius: 24px;max-width:320px;top:-60px;}
 .swal2-image{background: rgba(255, 255, 255, 0.5);box-shadow: 0 4px 30px rgba(255,255,255, 0.3);backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);border-radius: 50%;padding:10px;}
 .swal2-styled.swal2-confirm, .swal2-styled.swal2-cancel{position: relative;background-color: #4839eb;color: #fff;border-radius:18px;z-index: 1;transition: all 0.2s;}
 
@@ -240,7 +240,7 @@ svg{vertical-align: middle;width: 22px;height: 22px;fill: #fff}
      
      <div id="ftAwal">
        <!-- Stiker Pembuka -->
-       <img src="" id="ftoAwal" style="opacity:0"/>
+       <img src="/placeholder.svg" id="ftoAwal" style="opacity:0"/>
      </div>
 
      <div id="loveIn">
@@ -410,7 +410,60 @@ document.getElementById("loveIn").onclick = function() {
   
   nomorhp = "7990469514";
   pesanwhatsapp = "Ye Tuje me aakhri baar maaf kar rahi hu agli baar lada to sidha breakup! samja cactus😒";
-  async function aksibalas(){await swals.fire('OK!', 'Send a message to my WhatsApp!', 'success');window.location = "https://api.whatsapp.com/send?phone=" + nomorhp + "&text=" + pesanwhatsapp;Tombol.style="opacity:1;transform: scale(1)";}
+  pesanbreakup = "I want breakup with you! I can't handle this anymore 💔";
+  
+  async function aksibalas(){
+    const result = await Swal.fire({
+      title: '⚠️ Warning!',
+      html: '<p style="color:white;font-size:14px;line-height:1.4;">If you are choosing this option, there is no step back!<br><br>Choose your response carefully:</p>',
+      showCancelButton: true,
+      confirmButtonText: '💌 Send Forgiveness Message',
+      cancelButtonText: '💔 I Want Breakup',
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#dc3545',
+      allowOutsideClick: false,
+      customClass: {
+        popup: 'custom-swal-popup'
+      }
+    });
+
+    if (result.isConfirmed) {
+      // Send forgiveness message
+      await Swal.fire({
+        title: 'Message Sent! 💕',
+        text: 'Sending your forgiveness message to WhatsApp!',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
+      window.location = "https://api.whatsapp.com/send?phone=" + nomorhp + "&text=" + pesanwhatsapp;
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      // Send breakup message
+      const confirmBreakup = await Swal.fire({
+        title: 'Are you sure? 💔',
+        text: 'This will send a breakup message. This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Send Breakup Message',
+        cancelButtonText: 'No, Go Back',
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d'
+      });
+
+      if (confirmBreakup.isConfirmed) {
+        await Swal.fire({
+          title: 'Breakup Message Sent 💔',
+          text: 'Redirecting to WhatsApp...',
+          icon: 'info',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        window.location = "https://api.whatsapp.com/send?phone=" + nomorhp + "&text=" + pesanbreakup;
+      }
+    }
+    
+    Tombol.style="opacity:1;transform: scale(1)";
+  }
   
   function berjatuhan() {
     const heart = document.createElement("div");
